@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Route, useRouteMatch } from 'react-router-dom';
+import { Route, useParams, useHistory } from 'react-router-dom';
 
 import SavedList from './Movies/SavedList';
 import MovieList from './Movies/MovieList';
@@ -9,7 +9,8 @@ import Movie from './Movies/Movie';
 export default function App () {
   const [saved, setSaved] = useState([]); // Stretch: the ids of "saved" movies
   const [movieList, setMovieList] = useState([]);
-  const id = useRouteMatch();
+  const { id } = useParams();
+  const history = useHistory();
 
   useEffect(() => {
     const getMovies = () => {
@@ -31,12 +32,21 @@ export default function App () {
     // This is stretch. Prevent the same movie from being "saved" more than once
   };
 
+function clickHandler(){
+    history.push(`${id}`);
+    console.log('Hello World!');
+  }
+
   return (
     <div>
       <SavedList list={[ /* This is stretch */]} />
 
-      <Route path="/" component={MovieList} />
-      <Route path="/movies/:id" component={Movie} />
+      <Route path="/" >
+        <MovieList onClick={clickHandler} movies={movieList} />
+      </Route>
+      <Route path="/movies/:id" >
+        <Movie  />
+      </Route>
     </div>
   );
 }
